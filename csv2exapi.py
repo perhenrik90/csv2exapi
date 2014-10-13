@@ -52,6 +52,7 @@ class Csv2ExApi:
         splitValue = self.splitValue
         jsonList = self.jsonList
         timestamp = self.timestamp
+        name = self.name
 
         for line in infile:
         # if first time, prepare the header 
@@ -77,7 +78,7 @@ class Csv2ExApi:
                 values = line.split(splitValue)
 
 
-                actorObj = {"mbox":values[header[email]]}
+                actorObj = {"mbox":values[header[email]], "name":values[header[name]]}
                 
                 verbObj = {"id":verbID, "display":self.verbDisplay}
                 objectObj = {"id":objectIDprefix+values[header[objectID]]}
