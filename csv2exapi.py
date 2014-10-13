@@ -1,5 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
 # Converts csv file to a list of ex api statements
 # @author Per-Henrik Kvalnes
+#
+
 import sys
 import json
 
@@ -16,8 +21,8 @@ class Csv2ExApi:
     objectID = "code"
     objectIDprefix = "act:campus:"
     timestamp = "completed"
-    verbID = "www.nob-ordbok.uio.no/perl/ordbok.cgi?OPP=fullføre&bokmaal=+&ordbok=bokmaal"
-
+    verbID = "http://www.oxforddictionaries.com/definition/english/complete"
+    verbDisplay = {"en-US":"Completed","no-NB":"Fullført"}
     splitValue = ";"
     jsonList = []
 
@@ -25,10 +30,13 @@ class Csv2ExApi:
         self.splitValue = splitValue
 
 
-    def setObjectPrefix(newidPrefix):
+    def setObjectPrefix(self, newidPrefix):
         # set a new prefix for object id's
         self.objectIDprefix = newidPrefix
 
+    def setVerbID(self, newVerb):
+        # set a new verb id
+        self.verbID = newVerb
 
 
     def execute(self):        
@@ -70,7 +78,8 @@ class Csv2ExApi:
 
 
                 actorObj = {"mbox":values[header[email]]}
-                verbObj = {"id":verbID}
+                
+                verbObj = {"id":verbID, "display":self.verbDisplay}
                 objectObj = {"id":objectIDprefix+values[header[objectID]]}
                 timestampObj = values[header[timestamp]]
         
