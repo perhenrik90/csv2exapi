@@ -1,7 +1,5 @@
-
-# Converts csv file to json
+# Converts csv file to a list of ex api statements
 # @author Per-Henrik Kvalnes
-
 import sys
 import json
 
@@ -11,6 +9,15 @@ outfile = open("out.json", "w")
 first = 0
 header = {}
 
+# static headers
+email = "email"
+name = "name"
+code = "code"
+timestamp = "completed"
+codeprefix = "act:campus:"
+verbID = "www.nob-ordbok.uio.no/perl/ordbok.cgi?OPP=fullføre&bokmaal=+&ordbok=bokmaal"
+
+splitValue = ";"
 jsonList = []
 
 for line in infile:
@@ -23,29 +30,33 @@ for line in infile:
         i = 0
         for key in keys:
             if key != "":
-                header[i] = key
+                header[key] = i
                 i += 1
 
-
-
+        print ("Headers")
+        print ("-------")
+        print (header)
         first = 1
 
     # if noe, make an json object
     else:
-        obj = {}
+
         line = line.strip("\n")
-        values = line.split(";")
+        values = line.split(splitValue)
 
-        i = 0
-        for value in values:
-            if value != "":
-                obj[header[i]] = value
 
-                i += 1
+        actorObj = {"mbox":values[header[email]]}
+        verbObj = {"id":verbID}
+        objectObj = {"id":codeprefix+values[header[code]]}
+        paramsObj = {}
+        timestampObj = values[header[timestamp]]
 
+        obj = {"actor":actorObj, "verb":verbObj, 
+               "params":paramsObj, "object":objectObj,
+               "timestamp":timestampObj}
         jsonList.append(obj)
 
 jsonString = json.dumps(jsonList, indent=4)
-
-outfile.write(jsonString)
-outfile.close()
+print(jsonString)
+#outfile.write(jsonString)
+#outfile.close()
