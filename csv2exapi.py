@@ -3,7 +3,7 @@
 import sys
 import json
 
-infile = open("allecampus13oktober2014.csv")
+infile = open("test.csv")
 outfile = open("out.json", "w")
 
 first = 0
