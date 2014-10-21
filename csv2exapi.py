@@ -4,7 +4,8 @@
 # Converts csv file to a list of ex api statements
 # @author Per-Henrik Kvalnes
 #
-
+# Column names name, lastname, email, code, timestamp
+#
 import sys
 import json
 
@@ -77,13 +78,19 @@ class Csv2ExApi:
                 line = line.strip("\n")
                 values = line.split(splitValue)
 
-
+		# Actor
                 actorObj = {"mbox":values[header[email]], "name":values[header[name]]}
-                
+               
+		# Verb 
                 verbObj = {"id":verbID, "display":self.verbDisplay}
-                objectObj = {"id":objectIDprefix+values[header[objectID]]}
+			
+
+		# Target / Object
+		objectDisplay = {"en":values[header[objectID]], "no":values[header[objectID]]}
+                objectObj = {"id":objectIDprefix+values[header[objectID]], "display":objectDisplay}
                 timestampObj = values[header[timestamp]]
-        
+      
+		# The hole statement  
                 obj = {"actor":actorObj, "verb":verbObj, 
                        "object":objectObj,
                        "timestamp":timestampObj}
